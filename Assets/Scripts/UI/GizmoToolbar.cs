@@ -9,9 +9,6 @@ public class GizmoToolbar : MonoBehaviour
     Button gridButton;
     Button spaceButton;
 
-    bool gridEnabled = false;
-    bool localSpace = true;
-
     void Awake()
     {
         doc = GetComponent<UIDocument>();
@@ -29,19 +26,11 @@ public class GizmoToolbar : MonoBehaviour
 
     void OnModeClicked()
     {
-        switch (GizmoModeController.Mode)
+        switch (GizmoSettings.Mode)
         {
-            case GizmoMode.Move:
-                GizmoModeController.SetMode(GizmoMode.Rotate);
-                break;
-
-            case GizmoMode.Rotate:
-                GizmoModeController.SetMode(GizmoMode.Scale);
-                break;
-
-            case GizmoMode.Scale:
-                GizmoModeController.SetMode(GizmoMode.Move);
-                break;
+            case GizmoMode.Move:   GizmoSettings.SetMode(GizmoMode.Rotate); break;
+            case GizmoMode.Rotate: GizmoSettings.SetMode(GizmoMode.Scale);  break;
+            case GizmoMode.Scale:  GizmoSettings.SetMode(GizmoMode.Move);   break;
         }
 
         Refresh();
@@ -49,22 +38,20 @@ public class GizmoToolbar : MonoBehaviour
 
     void OnGridClicked()
     {
-        gridEnabled = !gridEnabled;
-        SnapSettings.Enabled = gridEnabled;
+        GizmoSettings.SnapEnabled = !GizmoSettings.SnapEnabled;
         Refresh();
     }
 
     void OnSpaceClicked()
     {
-        localSpace = !localSpace;
-        GizmoSpace.Local = localSpace;
+        GizmoSettings.LocalSpace = !GizmoSettings.LocalSpace;
         Refresh();
     }
 
     void Refresh()
     {
-        modeButton.text = $"Mode: {GizmoModeController.Mode}";
-        gridButton.text = gridEnabled ? "Grid: On" : "Grid: Off";
-        spaceButton.text = localSpace ? "Space: Local" : "Space: Global";
+        modeButton.text = $"Mode: {GizmoSettings.Mode}";
+        gridButton.text = GizmoSettings.SnapEnabled ? "Grid: On" : "Grid: Off";
+        spaceButton.text = GizmoSettings.LocalSpace ? "Space: Local" : "Space: Global";
     }
 }

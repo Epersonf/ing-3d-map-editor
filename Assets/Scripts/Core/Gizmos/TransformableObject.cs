@@ -15,9 +15,9 @@ public class TransformableObject : MonoBehaviour
     col.enabled = !selected;
 
     if (selected)
-      GizmoModeController.SetCurrent(this);
+      GizmoSettings.SetCurrent(this);
     else
-      GizmoModeController.Clear();
+      GizmoSettings.Clear();
   }
 
   public Transform TF => transform;
