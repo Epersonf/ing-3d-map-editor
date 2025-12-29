@@ -15,17 +15,9 @@ public class TransformableObject : MonoBehaviour
     col.enabled = !selected;
 
     if (selected)
-    {
-      MoveGizmo.Instance.Attach(this);
-      RotateGizmo.Instance.Attach(this);
-      ScaleGizmo.Instance.Attach(this);
-    }
+      GizmoModeController.SetCurrent(this);
     else
-    {
-      MoveGizmo.Instance.Detach();
-      RotateGizmo.Instance.Detach();
-      ScaleGizmo.Instance.Detach();
-    }
+      GizmoModeController.Clear();
   }
 
   public Transform TF => transform;

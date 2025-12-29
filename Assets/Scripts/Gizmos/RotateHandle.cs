@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class AxisHandle : MonoBehaviour
+public class RotateHandle : MonoBehaviour
 {
     TransformableObject target;
     Vector3 axis;
@@ -14,10 +14,11 @@ public class AxisHandle : MonoBehaviour
         axis = a.normalized;
     }
 
-    public void Apply(Vector3 delta, Vector3 basePos)
+    public void Apply(Vector3 delta)
     {
-        if (target == null) return;
-        float d = Vector3.Dot(delta, axis);
-        target.TF.position = basePos + axis * d;
+        if (!target) return;
+
+        float amount = delta.magnitude * Mathf.Sign(Vector3.Dot(delta, axis));
+        target.TF.Rotate(axis, amount * 5f, Space.World);
     }
 }

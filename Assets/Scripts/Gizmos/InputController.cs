@@ -10,6 +10,9 @@ public class InputController : MonoBehaviour
 
     TransformableObject current;
     AxisHandle dragging;
+    RotateHandle rotating;
+    ScaleHandle scaling;
+    Plane dragPlane;
     Vector3 dragStartPos;
     Vector3 objStartPos;
 
@@ -34,11 +37,41 @@ public class InputController : MonoBehaviour
             Ray r = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
             if (Physics.Raycast(r, out var hit, 200f, hitMask))
             {
-                if (hit.collider.TryGetComponent(out AxisHandle handle))
+                if (hit.collider.TryGetComponent(out AxisHandle axis))
                 {
-                    dragging = handle;
-                    dragStartPos = hit.point;
-                    objStartPos = handle.transform.parent.position;
+                    dragging = axis;
+
+                    Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
+                    dragPlane = new Plane(FreeCameraController.Instance.MainCamera.transform.forward, axis.Target.TF.position);
+
+                    dragPlane.Raycast(rr, out float enter);
+                    dragStartPos = rr.GetPoint(enter);
+
+                    objStartPos = axis.Target.TF.position;
+                    return;
+                }
+
+                if (hit.collider.TryGetComponent(out RotateHandle rot))
+                {
+                    rotating = rot;
+
+                    Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
+                    dragPlane = new Plane(FreeCameraController.Instance.MainCamera.transform.forward, rot.Target.TF.position);
+
+                    dragPlane.Raycast(rr, out float enterR);
+                    dragStartPos = rr.GetPoint(enterR);
+                    return;
+                }
+
+                if (hit.collider.TryGetComponent(out ScaleHandle scl))
+                {
+                    scaling = scl;
+
+                    Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
+                    dragPlane = new Plane(FreeCameraController.Instance.MainCamera.transform.forward, scl.Target.TF.position);
+
+                    dragPlane.Raycast(rr, out float enterS);
+                    dragStartPos = rr.GetPoint(enterS);
                     return;
                 }
 
@@ -55,17 +88,26 @@ public class InputController : MonoBehaviour
             current = null;
         }
 
-        if (click.IsPressed() && dragging != null)
+        if (click.IsPressed())
         {
-            Ray r = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
-            if (Physics.Raycast(r, out var hit, 200f))
+            Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
+
+            if (dragPlane.Raycast(rr, out float enter))
             {
-                Vector3 delta = hit.point - dragStartPos;
-                dragging.Apply(delta * dragSensitivity, objStartPos);
+                Vector3 planePoint = rr.GetPoint(enter);
+                Vector3 delta = planePoint - dragStartPos;
+
+                if (dragging != null) dragging.Apply(delta * dragSensitivity, objStartPos);
+                if (rotating != null) rotating.Apply(delta);
+                if (scaling != null) scaling.Apply(delta);
             }
         }
 
         if (click.WasReleasedThisFrame())
+        {
             dragging = null;
+            rotating = null;
+            scaling = null;
+        }
     }
 }
