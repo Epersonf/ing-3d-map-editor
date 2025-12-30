@@ -17,6 +17,7 @@ public class ObjectInspector : MonoBehaviour
     Button addTag;
 
     TransformableObject current;
+    List<KeyValuePair<string, string>> tagItems; // Lista mantida em memória
 
     void Awake()
     {
@@ -44,6 +45,7 @@ public class ObjectInspector : MonoBehaviour
         addTag.clicked += AddTag;
 
         ConfigureTagList();
+        tagItems = new List<KeyValuePair<string, string>>();
     }
 
     void Update()
@@ -100,37 +102,127 @@ public class ObjectInspector : MonoBehaviour
 
         HookTransformEvents();
 
-        // Provide an array copy of KeyValuePair so ListView can index
-        var items = current.Tags.Select(kv => new KeyValuePair<string,string>(kv.Key, kv.Value)).ToList();
-        tagList.itemsSource = items;
+        // Atualizar a lista de tags
+        UpdateTagList();
     }
 
     void ConfigureTagList()
     {
-        tagList.makeItem = () => new Label();
+        // Configurar altura fixa para o ListView (opcional, mas ajuda na visualização)
+        tagList.style.height = 150;
+
+        tagList.makeItem = () =>
+        {
+            var container = new VisualElement();
+            container.style.flexDirection = FlexDirection.Row;
+            container.style.justifyContent = Justify.SpaceBetween;
+            container.style.paddingTop = 2;
+            container.style.paddingBottom = 2;
+            
+            var keyLabel = new Label();
+            keyLabel.name = "key";
+            keyLabel.style.width = 120;
+            keyLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            
+            var valueLabel = new Label();
+            valueLabel.name = "value";
+            valueLabel.style.flexGrow = 1;
+            valueLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            
+            var deleteButton = new Button();
+            deleteButton.name = "delete";
+            deleteButton.text = "×";
+            deleteButton.style.width = 30;
+            
+            container.Add(keyLabel);
+            container.Add(valueLabel);
+            container.Add(deleteButton);
+            return container;
+        };
+        
         tagList.bindItem = (element, i) =>
         {
-            var kv = (KeyValuePair<string,string>)tagList.itemsSource[i];
-            (element as Label).text = $"{kv.Key} = {kv.Value}";
+            if (i < tagItems.Count)
+            {
+                var kv = tagItems[i];
+                var keyLabel = element.Q<Label>("key");
+                var valueLabel = element.Q<Label>("value");
+                var deleteButton = element.Q<Button>("delete");
+                
+                if (keyLabel != null) keyLabel.text = kv.Key;
+                if (valueLabel != null) valueLabel.text = kv.Value;
+
+                if (deleteButton != null)
+                {
+                    // remove old handlers to avoid multiple subscriptions
+                    deleteButton.clicked -= null;
+                    deleteButton.clicked += () =>
+                    {
+                        if (i >= 0 && i < tagItems.Count && current != null)
+                        {
+                            var key = tagItems[i].Key;
+                            current.RemoveTag(key);
+                            UpdateTagList();
+                        }
+                    };
+                }
+            }
         };
 
         tagList.selectionType = SelectionType.Single;
+        tagList.itemsSource = tagItems;
+    }
+
+    void UpdateTagList()
+    {
+        if (current == null)
+        {
+            tagItems.Clear();
+            tagList.Rebuild();
+            return;
+        }
+
+        // Atualizar a lista mantida em memória
+        tagItems.Clear();
+        tagItems.AddRange(current.Tags.Select(kv => new KeyValuePair<string, string>(kv.Key, kv.Value)));
+        
+        // Notificar o ListView que os dados mudaram
+        tagList.itemsSource = tagItems;
+        tagList.Rebuild();
     }
 
     void HookTransformEvents()
     {
-        posX.RegisterValueChangedCallback(v => ApplyPos());
-        posY.RegisterValueChangedCallback(v => ApplyPos());
-        posZ.RegisterValueChangedCallback(v => ApplyPos());
+        // Remover callbacks antigos primeiro (evitar múltiplas inscrições)
+        posX.UnregisterValueChangedCallback(OnPosChanged);
+        posY.UnregisterValueChangedCallback(OnPosChanged);
+        posZ.UnregisterValueChangedCallback(OnPosChanged);
 
-        rotX.RegisterValueChangedCallback(v => ApplyRot());
-        rotY.RegisterValueChangedCallback(v => ApplyRot());
-        rotZ.RegisterValueChangedCallback(v => ApplyRot());
+        rotX.UnregisterValueChangedCallback(OnRotChanged);
+        rotY.UnregisterValueChangedCallback(OnRotChanged);
+        rotZ.UnregisterValueChangedCallback(OnRotChanged);
 
-        sclX.RegisterValueChangedCallback(v => ApplyScale());
-        sclY.RegisterValueChangedCallback(v => ApplyScale());
-        sclZ.RegisterValueChangedCallback(v => ApplyScale());
+        sclX.UnregisterValueChangedCallback(OnScaleChanged);
+        sclY.UnregisterValueChangedCallback(OnScaleChanged);
+        sclZ.UnregisterValueChangedCallback(OnScaleChanged);
+
+        // Adicionar novos callbacks
+        posX.RegisterValueChangedCallback(OnPosChanged);
+        posY.RegisterValueChangedCallback(OnPosChanged);
+        posZ.RegisterValueChangedCallback(OnPosChanged);
+
+        rotX.RegisterValueChangedCallback(OnRotChanged);
+        rotY.RegisterValueChangedCallback(OnRotChanged);
+        rotZ.RegisterValueChangedCallback(OnRotChanged);
+
+        sclX.RegisterValueChangedCallback(OnScaleChanged);
+        sclY.RegisterValueChangedCallback(OnScaleChanged);
+        sclZ.RegisterValueChangedCallback(OnScaleChanged);
     }
+
+    void OnPosChanged(ChangeEvent<float> evt) => ApplyPos();
+    void OnRotChanged(ChangeEvent<float> evt) => ApplyRot();
+    void OnScaleChanged(ChangeEvent<float> evt) => ApplyScale();
 
     void ApplyPos()
     {
@@ -159,11 +251,15 @@ public class ObjectInspector : MonoBehaviour
     void AddTag()
     {
         if (!current) return;
-        if (string.IsNullOrEmpty(newKey.value)) return;
+        if (string.IsNullOrWhiteSpace(newKey.value)) return;
 
-        current.Tags[newKey.value] = newValue.value;
-
-        Refresh();
+        current.Tags[newKey.value.Trim()] = newValue.value;
+        
+        // Limpar campos e atualizar lista
+        newKey.value = "";
+        newValue.value = "";
+        
+        UpdateTagList();
     }
 
     void SetEnabled(bool enabled)

@@ -25,4 +25,10 @@ public class TransformableObject : MonoBehaviour
   }
 
   public Transform TF => transform;
+
+    // Novo método para remover tags
+    public bool RemoveTag(string key)
+    {
+        return Tags.Remove(key);
+    }
 }
