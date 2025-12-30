@@ -18,9 +18,23 @@ public class ScaleHandle : MonoBehaviour
     {
         if (!target) return;
 
-        float amount = Vector3.Dot(delta, axis);
+        Vector3 worldAxis =
+            GizmoSettings.LocalSpace
+            ? target.TF.TransformDirection(axis)
+            : axis;
+
+        float amount = Vector3.Dot(delta, worldAxis);
+
         Vector3 s = target.TF.localScale;
         s += axis * amount;
+
+        if (GizmoSettings.SnapEnabled)
+        {
+            s.x = Mathf.Round(s.x / GizmoSettings.SnapUnit) * GizmoSettings.SnapUnit;
+            s.y = Mathf.Round(s.y / GizmoSettings.SnapUnit) * GizmoSettings.SnapUnit;
+            s.z = Mathf.Round(s.z / GizmoSettings.SnapUnit) * GizmoSettings.SnapUnit;
+        }
+
         target.TF.localScale = Vector3.Max(s, Vector3.one * 0.01f);
     }
 }

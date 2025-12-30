@@ -18,7 +18,16 @@ public class RotateHandle : MonoBehaviour
     {
         if (!target) return;
 
-        float amount = delta.magnitude * Mathf.Sign(Vector3.Dot(delta, axis));
-        target.TF.Rotate(axis, amount * 5f, Space.World);
+        Vector3 worldAxis =
+            GizmoSettings.LocalSpace
+            ? target.TF.TransformDirection(axis)
+            : axis;
+
+        float amount = delta.magnitude * Mathf.Sign(Vector3.Dot(delta, worldAxis)) * 5f;
+
+        if (GizmoSettings.SnapEnabled)
+            amount = Mathf.Round(amount / 15f) * 15f; // 15 degrees
+
+        target.TF.Rotate(worldAxis, amount, Space.World);
     }
 }
