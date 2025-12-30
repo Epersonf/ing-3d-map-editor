@@ -1,49 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:ui="UnityEngine.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="ObjectInspector.uss" />
+    <ui:VisualElement name="root"
+        style="position:absolute;
+               top:10px;
+               right:10px;
+               width:320px;
+               padding:8px;
+               background-color:rgba(0,0,0,0.35);
+               flex-direction:column;">
 
-    <ui:ScrollView style="width:300px; padding:8px;">
+        <ui:ScrollView style="flex-grow:1; overflow-x:hidden;">
 
-        <ui:Label text="Inspector" class="header"/>
+            <ui:Label text="Inspector" />
 
-        <ui:Foldout text="Transform" value="true">
+            <ui:Foldout text="Transform" value="true">
 
-            <ui:VisualElement style="flex-direction:row;">
-                <ui:Label text="Position" style="width:70px;" />
-                <ui:FloatField name="posX" label="X"/>
-                <ui:FloatField name="posY" label="Y"/>
-                <ui:FloatField name="posZ" label="Z"/>
-            </ui:VisualElement>
+                <!-- POSITION -->
+                <ui:VisualElement class="row">
+                    <ui:Label text="Position" class="title"/>
 
-            <ui:VisualElement style="flex-direction:row;">
-                <ui:Label text="Rotation" style="width:70px;" />
-                <ui:FloatField name="rotX" label="X"/>
-                <ui:FloatField name="rotY" label="Y"/>
-                <ui:FloatField name="rotZ" label="Z"/>
-            </ui:VisualElement>
+                    <ui:FloatField name="posX" class="vec"/>
+                    <ui:FloatField name="posY" class="vec"/>
+                    <ui:FloatField name="posZ" class="vec"/>
+                </ui:VisualElement>
 
-            <ui:VisualElement style="flex-direction:row;">
-                <ui:Label text="Scale" style="width:70px;" />
-                <ui:FloatField name="sclX" label="X"/>
-                <ui:FloatField name="sclY" label="Y"/>
-                <ui:FloatField name="sclZ" label="Z"/>
-            </ui:VisualElement>
+                <!-- ROTATION -->
+                <ui:VisualElement class="row">
+                    <ui:Label text="Rotation" class="title"/>
 
-        </ui:Foldout>
+                    <ui:FloatField name="rotX" class="vec"/>
+                    <ui:FloatField name="rotY" class="vec"/>
+                    <ui:FloatField name="rotZ" class="vec"/>
+                </ui:VisualElement>
 
-        <ui:Foldout text="Tags" value="true">
+                <!-- SCALE -->
+                <ui:VisualElement class="row">
+                    <ui:Label text="Scale" class="title"/>
 
-            <ui:ListView name="tagList" />
+                    <ui:FloatField name="sclX" class="vec"/>
+                    <ui:FloatField name="sclY" class="vec"/>
+                    <ui:FloatField name="sclZ" class="vec"/>
+                </ui:VisualElement>
 
-            <ui:VisualElement style="flex-direction:row; margin-top:6px;">
-                <ui:TextField name="newKey" label="Key" />
-                <ui:TextField name="newValue" label="Value" />
-            </ui:VisualElement>
+            </ui:Foldout>
 
-            <ui:Button name="addTag" text="Add Tag" />
+            <ui:Foldout text="Tags" value="true">
+                <ui:ListView name="tagList" />
+                <ui:VisualElement class="row">
+                    <ui:TextField name="newKey" label="Key" />
+                    <ui:TextField name="newValue" label="Value" />
+                </ui:VisualElement>
+                <ui:Button name="addTag" text="Add Tag" />
+            </ui:Foldout>
 
-        </ui:Foldout>
-
-    </ui:ScrollView>
-
+        </ui:ScrollView>
+    </ui:VisualElement>
 </ui:UXML>

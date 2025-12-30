@@ -13,6 +13,10 @@ public class GizmoToolbar : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
 
+        doc.rootVisualElement.style.position = Position.Absolute;
+        doc.rootVisualElement.style.top = 10;
+        doc.rootVisualElement.style.left = 10;
+
         modeButton = doc.rootVisualElement.Q<Button>("modeButton");
         gridButton = doc.rootVisualElement.Q<Button>("gridButton");
         spaceButton = doc.rootVisualElement.Q<Button>("spaceButton");

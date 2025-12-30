@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class InputController : MonoBehaviour
 {
@@ -34,6 +35,21 @@ public class InputController : MonoBehaviour
 
     void Update()
     {
+        // ---- BLOQUEIA CLIQUE EM UI ----
+        var doc = FindFirstObjectByType<UIDocument>();
+        if (doc != null)
+        {
+            var panel = doc.rootVisualElement.panel;
+            var pos = pointer.ReadValue<Vector2>();
+
+            if (panel != null && panel.Pick(pos) != null)
+            {
+                // cancela interação 3D
+                return;
+            }
+        }
+        // --------------------------------
+
         if (click.WasPressedThisFrame())
         {
             Ray r = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());

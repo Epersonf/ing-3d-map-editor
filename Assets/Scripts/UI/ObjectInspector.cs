@@ -22,6 +22,8 @@ public class ObjectInspector : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
 
+        // layout handled in UXML (no runtime style adjustments)
+
         posX = doc.rootVisualElement.Q<FloatField>("posX");
         posY = doc.rootVisualElement.Q<FloatField>("posY");
         posZ = doc.rootVisualElement.Q<FloatField>("posZ");
@@ -46,11 +48,30 @@ public class ObjectInspector : MonoBehaviour
 
     void Update()
     {
+        // troca de objeto selecionado
         if (GizmoSettings.Current != current)
         {
             current = GizmoSettings.Current;
             Refresh();
         }
+
+        if (!current)
+            return;
+
+        // atualização contínua sem disparar eventos
+        var t = current.TF;
+
+        posX.SetValueWithoutNotify(t.position.x);
+        posY.SetValueWithoutNotify(t.position.y);
+        posZ.SetValueWithoutNotify(t.position.z);
+
+        rotX.SetValueWithoutNotify(t.eulerAngles.x);
+        rotY.SetValueWithoutNotify(t.eulerAngles.y);
+        rotZ.SetValueWithoutNotify(t.eulerAngles.z);
+
+        sclX.SetValueWithoutNotify(t.localScale.x);
+        sclY.SetValueWithoutNotify(t.localScale.y);
+        sclZ.SetValueWithoutNotify(t.localScale.z);
     }
 
     void Refresh()
