@@ -14,7 +14,7 @@ public class ScaleHandle : MonoBehaviour
         axis = a.normalized;
     }
 
-    public void Apply(Vector3 delta)
+    public void Apply(Vector3 delta, Vector3 baseScale)
     {
         if (!target) return;
 
@@ -23,9 +23,11 @@ public class ScaleHandle : MonoBehaviour
             ? target.TF.TransformDirection(axis)
             : axis;
 
-        float amount = Vector3.Dot(delta, worldAxis);
+        float signed = Vector3.Dot(delta, worldAxis);
 
-        Vector3 s = target.TF.localScale;
+        float amount = 1f + signed * 2f;
+
+        Vector3 s = baseScale;
         s += axis * amount;
 
         if (GizmoSettings.SnapEnabled)

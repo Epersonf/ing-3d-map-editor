@@ -15,6 +15,8 @@ public class InputController : MonoBehaviour
     Plane dragPlane;
     Vector3 dragStartPos;
     Vector3 objStartPos;
+    Quaternion startRot;
+    Vector3 startScale;
 
     InputAction click;
     InputAction pointer;
@@ -60,6 +62,7 @@ public class InputController : MonoBehaviour
 
                     dragPlane.Raycast(rr, out float enterR);
                     dragStartPos = rr.GetPoint(enterR);
+                    startRot = rot.Target.TF.rotation;
                     return;
                 }
 
@@ -72,6 +75,7 @@ public class InputController : MonoBehaviour
 
                     dragPlane.Raycast(rr, out float enterS);
                     dragStartPos = rr.GetPoint(enterS);
+                    startScale = scl.Target.TF.localScale;
                     return;
                 }
 
@@ -98,8 +102,8 @@ public class InputController : MonoBehaviour
                 Vector3 delta = planePoint - dragStartPos;
 
                 if (dragging != null) dragging.Apply(delta * dragSensitivity, objStartPos);
-                if (rotating != null) rotating.Apply(delta);
-                if (scaling != null) scaling.Apply(delta);
+                if (rotating != null) rotating.Apply(delta * dragSensitivity, startRot);
+                if (scaling != null) scaling.Apply(delta * dragSensitivity, startScale);
             }
         }
 

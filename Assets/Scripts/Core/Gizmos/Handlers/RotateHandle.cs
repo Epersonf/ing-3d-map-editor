@@ -14,7 +14,7 @@ public class RotateHandle : MonoBehaviour
         axis = a.normalized;
     }
 
-    public void Apply(Vector3 delta)
+    public void Apply(Vector3 delta, Quaternion baseRot)
     {
         if (!target) return;
 
@@ -23,11 +23,14 @@ public class RotateHandle : MonoBehaviour
             ? target.TF.TransformDirection(axis)
             : axis;
 
-        float amount = delta.magnitude * Mathf.Sign(Vector3.Dot(delta, worldAxis)) * 5f;
+        float signed = Vector3.Dot(delta, worldAxis);
+
+        float degrees = signed * 300f; // adjustable gain
 
         if (GizmoSettings.SnapEnabled)
-            amount = Mathf.Round(amount / 15f) * 15f; // 15 degrees
+            degrees = Mathf.Round(degrees / 15f) * 15f;
 
-        target.TF.Rotate(worldAxis, amount, Space.World);
+        target.TF.rotation =
+            Quaternion.AngleAxis(degrees, worldAxis) * baseRot;
     }
 }
