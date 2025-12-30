@@ -503,19 +503,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5528880862028106901, guid: 5fcd7e16f4868894fa43b96a46c3ba17, type: 3}
       propertyPath: m_Name
-      value: UI
+      value: EditorUI
       objectReference: {fileID: 0}
     - target: {fileID: 6945346410562917116, guid: 5fcd7e16f4868894fa43b96a46c3ba17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.48159
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6945346410562917116, guid: 5fcd7e16f4868894fa43b96a46c3ba17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6945346410562917116, guid: 5fcd7e16f4868894fa43b96a46c3ba17, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.48411
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6945346410562917116, guid: 5fcd7e16f4868894fa43b96a46c3ba17, type: 3}
       propertyPath: m_LocalRotation.w

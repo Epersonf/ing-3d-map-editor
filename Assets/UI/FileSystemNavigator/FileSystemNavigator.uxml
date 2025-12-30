@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd">
+    <Style src="FileSystemNavigator.uss" />
+    
+    <ui:VisualElement name="root" class="file-system-container">
+        <!-- Header -->
+        <ui:VisualElement class="header">
+            <ui:Label text="Project Files" class="title" />
+            <ui:VisualElement class="header-actions">
+                <ui:Button name="goToAssetsButton" text="Assets" tooltip="Go to Assets folder" />
+                <ui:Button name="refreshButton" text="↻" tooltip="Refresh" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+        <!-- Path Bar -->
+        <ui:VisualElement class="path-bar">
+            <ui:Label text="Path:" class="path-label" />
+            <ui:TextField name="pathField" class="path-field" isReadOnly="true" />
+        </ui:VisualElement>
+        
+        <!-- File Tree -->
+        <ui:TreeView name="fileTreeView" class="file-tree" />
+        
+        <!-- Status Bar -->
+        <ui:VisualElement class="status-bar">
+            <ui:Label text="Double-click folders to expand/collapse" class="status-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
