@@ -4,9 +4,11 @@
         style="position:absolute;
                top:10px;
                right:10px;
-               width:320px;
+               width:400px;
                padding:8px;
-               background-color:rgba(0,0,0,0.35);
+               color:#fff;
+               height:100%;
+               background-color:rgba(0,0,0,.5);
                flex-direction:column;">
 
         <ui:ScrollView style="flex-grow:1; overflow-x:hidden;">
