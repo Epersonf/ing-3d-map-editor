@@ -35,23 +35,35 @@ public class InputController : MonoBehaviour
 
     void Update()
     {
-        // ---- BLOQUEIA CLIQUE EM UI ----
-        var doc = FindFirstObjectByType<UIDocument>();
-        if (doc != null)
+        // Processar arrasto enquanto o botão está pressionado
+        if (click.IsPressed() && (dragging != null || rotating != null || scaling != null))
         {
-            var panel = doc.rootVisualElement.panel;
-            var pos = pointer.ReadValue<Vector2>();
+            Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
 
-            if (panel != null && panel.Pick(pos) != null)
+            if (dragPlane.Raycast(rr, out float enter))
             {
-                // cancela interação 3D
-                return;
+                Vector3 planePoint = rr.GetPoint(enter);
+                Vector3 delta = planePoint - dragStartPos;
+
+                if (dragging != null) dragging.Apply(delta * dragSensitivity, objStartPos);
+                if (rotating != null) rotating.Apply(delta * dragSensitivity, startRot);
+                if (scaling != null) scaling.Apply(delta * dragSensitivity, startScale);
             }
         }
-        // --------------------------------
+    }
 
+    void LateUpdate()
+    {
+        // Processar o início do clique (quando o botão é pressionado)
         if (click.WasPressedThisFrame())
         {
+            // Se a UI foi clicada, não interagir com a cena
+            if (UIBlocker.ClickedUI)
+            {
+                UIBlocker.ClickedUI = false;
+                return;
+            }
+
             Ray r = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
             if (Physics.Raycast(r, out var hit, 200f, hitMask))
             {
@@ -108,21 +120,7 @@ public class InputController : MonoBehaviour
             current = null;
         }
 
-        if (click.IsPressed())
-        {
-            Ray rr = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
-
-            if (dragPlane.Raycast(rr, out float enter))
-            {
-                Vector3 planePoint = rr.GetPoint(enter);
-                Vector3 delta = planePoint - dragStartPos;
-
-                if (dragging != null) dragging.Apply(delta * dragSensitivity, objStartPos);
-                if (rotating != null) rotating.Apply(delta * dragSensitivity, startRot);
-                if (scaling != null) scaling.Apply(delta * dragSensitivity, startScale);
-            }
-        }
-
+        // Processar a liberação do botão
         if (click.WasReleasedThisFrame())
         {
             dragging = null;

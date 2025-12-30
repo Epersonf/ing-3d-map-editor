@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 95658769}
   - component: {fileID: 95658768}
   - component: {fileID: 95658770}
+  - component: {fileID: 95658771}
   m_Layer: 0
   m_Name: GizmosToolbar
   m_TagString: Untagged
@@ -187,6 +188,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af468538dc0bbe14c9d7811600db1407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GizmoToolbar
+--- !u!114 &95658771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95658767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbbdd20aded6654dadcff83e09efec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPointerCatcher
 --- !u!1 &303158854
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +259,7 @@ GameObject:
   - component: {fileID: 566808073}
   - component: {fileID: 566808075}
   - component: {fileID: 566808074}
+  - component: {fileID: 566808076}
   m_Layer: 0
   m_Name: ObjectInspector
   m_TagString: Untagged
@@ -303,6 +317,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e504879276c617c459770b413be87b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectInspector
+--- !u!114 &566808076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566808072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbbdd20aded6654dadcff83e09efec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPointerCatcher
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
