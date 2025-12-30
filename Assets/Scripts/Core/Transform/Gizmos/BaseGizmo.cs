@@ -9,6 +9,11 @@ public abstract class BaseGizmo<T> : LazySingleton<T> where T : MonoBehaviour
         target = t;
         gameObject.SetActive(true);
         transform.position = t.TF.position;
+
+        if (GizmoSettings.LocalSpace)
+            transform.rotation = t.TF.rotation;
+        else
+            transform.rotation = Quaternion.identity;
     }
 
     public void Detach()
@@ -19,7 +24,13 @@ public abstract class BaseGizmo<T> : LazySingleton<T> where T : MonoBehaviour
 
     protected virtual void LateUpdate()
     {
-        if (target != null)
-            transform.position = target.TF.position;
+        if (target == null) return;
+
+        transform.position = target.TF.position;
+
+        if (GizmoSettings.LocalSpace)
+            transform.rotation = target.TF.rotation;
+        else
+            transform.rotation = Quaternion.identity;
     }
 }
