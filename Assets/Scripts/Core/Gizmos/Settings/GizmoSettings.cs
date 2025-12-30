@@ -9,7 +9,7 @@ public static class GizmoSettings
     public static bool SnapEnabled = false;
     public static float SnapUnit = 1f;
 
-    public static bool LocalSpace = true;
+    public static bool LocalSpace = false;
 
     public static TransformableObject Current;
 
