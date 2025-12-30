@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:ui="UnityEngine.UIElements">
+
+    <ui:ScrollView style="width:300px; padding:8px;">
+
+        <ui:Label text="Inspector" class="header"/>
+
+        <ui:Foldout text="Transform" value="true">
+
+            <ui:VisualElement style="flex-direction:row;">
+                <ui:Label text="Position" style="width:70px;" />
+                <ui:FloatField name="posX" label="X"/>
+                <ui:FloatField name="posY" label="Y"/>
+                <ui:FloatField name="posZ" label="Z"/>
+            </ui:VisualElement>
+
+            <ui:VisualElement style="flex-direction:row;">
+                <ui:Label text="Rotation" style="width:70px;" />
+                <ui:FloatField name="rotX" label="X"/>
+                <ui:FloatField name="rotY" label="Y"/>
+                <ui:FloatField name="rotZ" label="Z"/>
+            </ui:VisualElement>
+
+            <ui:VisualElement style="flex-direction:row;">
+                <ui:Label text="Scale" style="width:70px;" />
+                <ui:FloatField name="sclX" label="X"/>
+                <ui:FloatField name="sclY" label="Y"/>
+                <ui:FloatField name="sclZ" label="Z"/>
+            </ui:VisualElement>
+
+        </ui:Foldout>
+
+        <ui:Foldout text="Tags" value="true">
+
+            <ui:ListView name="tagList" />
+
+            <ui:VisualElement style="flex-direction:row; margin-top:6px;">
+                <ui:TextField name="newKey" label="Key" />
+                <ui:TextField name="newValue" label="Value" />
+            </ui:VisualElement>
+
+            <ui:Button name="addTag" text="Add Tag" />
+
+        </ui:Foldout>
+
+    </ui:ScrollView>
+
+</ui:UXML>

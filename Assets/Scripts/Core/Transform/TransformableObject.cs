@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class TransformableObject : MonoBehaviour
 {
   Collider col;
+
+  public Dictionary<string, string> Tags { get; }
+      = new Dictionary<string, string>();
 
   void Awake()
   {
