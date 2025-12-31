@@ -62,7 +62,8 @@ public class ObjectInspector : MonoBehaviour
     void Refresh()
     {
         ClearTagRows();
-
+        if (!current) return;
+    
         foreach (var kv in current.Tags.ToList())
             CreateTagRow(kv.Key, kv.Value);
     }

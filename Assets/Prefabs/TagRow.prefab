@@ -683,6 +683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b693298f9ce1e644ca983822e6930784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TagRow
-  keyLabel: {fileID: 0}
-  valueLabel: {fileID: 0}
-  deleteButton: {fileID: 0}
+  keyLabel: {fileID: 2411357539363305090}
+  valueLabel: {fileID: 384445512054418881}
+  deleteButton: {fileID: 7217174759018573672}

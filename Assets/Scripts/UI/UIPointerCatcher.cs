@@ -1,31 +1,22 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(UIDocument))]
 public class UIPointerCatcher : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
-        var uiDocument = GetComponent<UIDocument>();
-        if (uiDocument == null || uiDocument.rootVisualElement == null)
+        AddCatchers();
+    }
+
+    void AddCatchers()
+    {
+        var rects = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (var rect in rects)
         {
-            Debug.LogError("UIPointerCatcher: UIDocument or rootVisualElement is null.");
-            return;
+            if (rect.TryGetComponent<UIRaycastCatcher>(out _))
+                continue;
+            rect.gameObject.AddComponent<UIRaycastCatcher>();
         }
-
-        // Registrar para eventos de ponteiro no rootVisualElement
-        uiDocument.rootVisualElement.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
-        // Registrar também para ClickEvent como fallback
-        uiDocument.rootVisualElement.RegisterCallback<ClickEvent>(OnClick, TrickleDown.TrickleDown);
-    }
-
-    void OnPointerDown(PointerDownEvent evt)
-    {
-        UIBlocker.ClickedUI = true;
-    }
-
-    void OnClick(ClickEvent evt)
-    {
-        UIBlocker.ClickedUI = true;
     }
 }

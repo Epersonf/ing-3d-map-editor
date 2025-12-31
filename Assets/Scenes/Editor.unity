@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 76928150}
+  - component: {fileID: 76928151}
   m_Layer: 0
   m_Name: Info
   m_TagString: Untagged
@@ -152,6 +153,18 @@ Transform:
   - {fileID: 1227017364}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &76928151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76928149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbbdd20aded6654dadcff83e09efec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPointerCatcher
 --- !u!1 &303158854
 GameObject:
   m_ObjectHideFlags: 0
