@@ -1,60 +1,29 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
-public class FileSystemNavigatorUI : MonoBehaviour
+public class FileSystemNavigatorUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
-    private UIDocument uiDocument;
-    
+    RectTransform panel;
+    Vector2 offset;
+
     void Awake()
     {
-        uiDocument = GetComponent<UIDocument>();
-        
-        // Position the window
-        var root = uiDocument.rootVisualElement;
-        root.style.position = Position.Absolute;
-        root.style.top = 50;
-        root.style.left = 10;
-        root.style.width = 350;
-        root.style.height = 500;
+        panel = GetComponent<RectTransform>();
     }
-    
-    // Optional: Add drag functionality to make window movable
-    void Start()
+
+    public void OnPointerDown(PointerEventData e)
     {
-        var root = uiDocument.rootVisualElement;
-        var header = root.Q<VisualElement>("header");
-        
-        if (header != null)
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            panel, e.position, e.pressEventCamera, out offset);
+    }
+
+    public void OnDrag(PointerEventData e)
+    {
+        Vector2 pos;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            panel.parent as RectTransform, e.position, e.pressEventCamera, out pos))
         {
-            header.RegisterCallback<PointerDownEvent>(evt =>
-            {
-                if (evt.button == 0) // Left mouse button
-                {
-                    root.CapturePointer(evt.pointerId);
-                    evt.StopPropagation();
-                }
-            });
-            
-            header.RegisterCallback<PointerMoveEvent>(evt =>
-            {
-                if (root.HasPointerCapture(evt.pointerId))
-                {
-                    var delta = evt.deltaPosition;
-                    var newX = root.style.left.value.value + delta.x;
-                    var newY = root.style.top.value.value + delta.y;
-                    
-                    root.style.left = newX;
-                    root.style.top = newY;
-                }
-            });
-            
-            header.RegisterCallback<PointerUpEvent>(evt =>
-            {
-                if (root.HasPointerCapture(evt.pointerId))
-                {
-                    root.ReleasePointer(evt.pointerId);
-                }
-            });
+            panel.localPosition = pos - offset;
         }
     }
 }

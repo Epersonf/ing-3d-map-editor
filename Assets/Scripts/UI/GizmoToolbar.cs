@@ -1,30 +1,22 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using TMPro;
 
 public class GizmoToolbar : MonoBehaviour
 {
-    UIDocument doc;
+    [SerializeField] Button modeButton;
+    [SerializeField] Button gridButton;
+    [SerializeField] Button spaceButton;
 
-    Button modeButton;
-    Button gridButton;
-    Button spaceButton;
+    [SerializeField] TMP_Text modeLabel;
+    [SerializeField] TMP_Text gridLabel;
+    [SerializeField] TMP_Text spaceLabel;
 
     void Awake()
     {
-        doc = GetComponent<UIDocument>();
-
-        doc.rootVisualElement.style.position = Position.Absolute;
-        doc.rootVisualElement.style.top = 10;
-        doc.rootVisualElement.style.left = 10;
-
-        modeButton = doc.rootVisualElement.Q<Button>("modeButton");
-        gridButton = doc.rootVisualElement.Q<Button>("gridButton");
-        spaceButton = doc.rootVisualElement.Q<Button>("spaceButton");
-
-        modeButton.clicked += OnModeClicked;
-        gridButton.clicked += OnGridClicked;
-        spaceButton.clicked += OnSpaceClicked;
-
+        modeButton.onClick.AddListener(OnModeClicked);
+        gridButton.onClick.AddListener(OnGridClicked);
+        spaceButton.onClick.AddListener(OnSpaceClicked);
         Refresh();
     }
 
@@ -32,11 +24,10 @@ public class GizmoToolbar : MonoBehaviour
     {
         switch (GizmoSettings.Mode)
         {
-            case GizmoMode.Move:   GizmoSettings.SetMode(GizmoMode.Rotate); break;
-            case GizmoMode.Rotate: GizmoSettings.SetMode(GizmoMode.Scale);  break;
-            case GizmoMode.Scale:  GizmoSettings.SetMode(GizmoMode.Move);   break;
+            case GizmoMode.Move: GizmoSettings.SetMode(GizmoMode.Rotate); break;
+            case GizmoMode.Rotate: GizmoSettings.SetMode(GizmoMode.Scale); break;
+            case GizmoMode.Scale: GizmoSettings.SetMode(GizmoMode.Move); break;
         }
-
         Refresh();
     }
 
@@ -54,8 +45,8 @@ public class GizmoToolbar : MonoBehaviour
 
     void Refresh()
     {
-        modeButton.text = $"Mode: {GizmoSettings.Mode}";
-        gridButton.text = GizmoSettings.SnapEnabled ? "Grid: On" : "Grid: Off";
-        spaceButton.text = GizmoSettings.LocalSpace ? "Space: Local" : "Space: Global";
+        modeLabel.text = $"Mode: {GizmoSettings.Mode}";
+        gridLabel.text = GizmoSettings.SnapEnabled ? "Grid: On" : "Grid: Off";
+        spaceLabel.text = GizmoSettings.LocalSpace ? "Space: Local" : "Space: Global";
     }
 }

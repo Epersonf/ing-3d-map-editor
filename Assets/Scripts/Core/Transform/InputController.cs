@@ -54,23 +54,9 @@ public class InputController : MonoBehaviour
 
     void LateUpdate()
     {
-        // Se UI foi clicada, não interagir com a cena
-        if (UIBlocker.ClickedUI)
-        {
-            UIBlocker.ClickedUI = false;
-            return;
-        }
-
         // Processar o início do clique (quando o botão é pressionado)
         if (click.WasPressedThisFrame())
         {
-            // Se a UI foi clicada, não interagir com a cena
-            if (UIBlocker.ClickedUI)
-            {
-                UIBlocker.ClickedUI = false;
-                return;
-            }
-
             Ray r = FreeCameraController.Instance.MainCamera.ScreenPointToRay(pointer.ReadValue<Vector2>());
             if (Physics.Raycast(r, out var hit, 200f, hitMask))
             {
